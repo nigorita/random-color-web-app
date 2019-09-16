@@ -1,89 +1,109 @@
-import React from "react";
+import './App.css';
+import React, { useState } from 'react';
+var randomColor = require('randomcolor');
 
-import "./App.css";
+// var randomColor = require("randomcolor");
+// let lum = process.argv[2];
+// let col = process.argv[3];
+// var color = randomColor({
+//   luminosity: lum,
+//   hue: col
+// });
 
 function Header() {
+  const [hideguide, setHideguide] = useState(true);
+
   return (
     <header className="Header">
       <div className="Header-logo">
         <h1>Random Color Generator</h1>
         <div className="guide">
-          <a className="popover" href="https://www.google.com" target="blank">
-            {" "}
-            pop over button{" "}
-          </a>
+          <button
+            className="popover"
+            onClick={() => {
+              setHideguide(!hideguide);
+            }}
+          >
+            What is it?
+          </button>
+          <div hidden={hideguide}>
+            'blablablablaba blablablablaba blablablablaba'
+          </div>
         </div>
       </div>
     </header>
   );
 }
 
-function Button() {
-  return <button className="generate-button">generate a random color!</button>;
-}
+function All() {
+  const initColor = randomColor();
+  const [color, setColor] = useState(initColor);
+  const [hue, setHue] = useState('random');
+  const [lum, setLum] = useState('random');
 
-function DropDown1() {
   return (
-    <div>
-      <label>Select Hue</label>
-      <select id="hues">
-        <option value="red">RED</option>
-        <option value="blue">BLUE</option>
-        <option value="green">GREEN</option>
-        <option value="aqua">AQUA</option>
-      </select>
+    <div className="All" style={{ backgroundColor: color }}>
+      <div className="selecting">
+        <div className="hue">
+          <label>Select Hue</label>
+          <select
+            id="hues"
+            value={hue}
+            onChange={event => {
+              setHue(event.target.value);
+            }}
+          >
+            <option value="random">---</option>
+            <option value="red">RED</option>
+            <option value="blue">BLUE</option>
+            <option value="green">GREEN</option>
+            <option value="yellow">YELLOW</option>
+            <option value="purple">PURPLE</option>
+            <option value="orange">ORANGE</option>
+          </select>
+        </div>
+        <div className="luminosity">
+          <label>Select Luminosity</label>
+
+          <select
+            id="lums"
+            value={lum}
+            onChange={event => {
+              setLum(event.target.value);
+            }}
+          >
+            <option value="random">---</option>
+            <option value="light">light</option>
+            <option value="bright">bright</option>
+            <option value="dark">dark</option>
+          </select>
+        </div>
+      </div>
+      <button
+        className="generate-button"
+        onClick={() => {
+          setColor(
+            randomColor({
+              luminosity: lum,
+              hue: hue,
+            }),
+          );
+        }}
+      >
+        generate a random color!
+      </button>
+      <br></br>
+      <br></br>
+      <b>{color}</b>
     </div>
   );
 }
-
-function DropDown2() {
-  return (
-    <div>
-      <lbael>Select Luminosity</lbael>
-      <select id="lums">
-        <option value="100">100</option>
-        <option value="80">80</option>
-        <option value="60">60</option>
-        <option value="40">40</option>
-      </select>
-    </div>
-  );
-}
-
-var hue = document.getElementById("scripts");
-
-function getSelectedOption(sel) {
-  var opt;
-  for (var i = 0, len = sel.options.length; i < len; i++) {
-    opt = sel.options[i];
-    if (opt.selected === true) {
-      break;
-    }
-  }
-  return opt;
-}
-
-// var selectedHue = getSelectedOption(hue);
-
-// // display its value and text
-// console.log( opt.value );
-// console.log( opt.text );
 
 function App() {
   return (
     <div className="App">
-      <div className="Header">
-        <Header />
-      </div>
-
-      <div className="Button">
-        <div className="selecting">
-          <DropDown1 />
-          <DropDown2 />
-        </div>
-
-        <Button />
-      </div>
+      <Header />
+      <All />
     </div>
   );
 }
